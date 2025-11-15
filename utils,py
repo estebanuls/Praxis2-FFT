@@ -1,0 +1,21 @@
+import numpy as np
+import soundfile as sf
+
+def mapear_ganancia_db(p):
+    return (p / 1023.0) * 24.0 - 12.0
+
+def db_a_lineal(db):
+    return 10 ** (db / 20.0)
+
+def mapear_volumen(p):
+    return p / 1023.0
+
+def guardar_salida(path, buffer, sr):
+    if len(buffer) == 0:
+        print("[Guardado] Sin datos.")
+        return
+    datos = np.concatenate(buffer)
+    if np.max(np.abs(datos)) > 1:
+        datos /= np.max(np.abs(datos))
+    sf.write(path, datos, sr, subtype='PCM_16')
+    print(f"[Guardado] {path}")
