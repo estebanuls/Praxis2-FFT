@@ -2,7 +2,7 @@ import numpy as np
 from utils import db_a_lineal, mapear_ganancia_db, mapear_volumen
 
 def detectar_picos(audio, sr):
-    segmento = audio[:min(len(audio), sr * 10)]
+    segmento = audio[:min(len(audio), sr*10)]
     Xg = np.fft.rfft(segmento * np.hanning(len(segmento)))
     magn = np.abs(Xg)
     freqs = np.fft.rfftfreq(len(segmento), 1/sr)
@@ -42,12 +42,11 @@ def procesar_audio(state, potenciometros, block, hop, ancho):
     vol = mapear_volumen(potenciometros[5])
 
     idx = np.arange(len(X))
-
     for g, bp in zip(ganancias, state["bins"]):
         f_p = state["freqs_global"][bp]
         bin_loc = np.argmin(np.abs(freqs_b - f_p))
-        mascara = np.exp(-0.5 * ((idx - bin_loc) / ancho)**2)
-        X *= 1 + (g - 1) * mascara
+        mascara = np.exp(-0.5 * ((idx - bin_loc)/ancho)**2)
+        X *= 1 + (g-1)*mascara
 
     bloque_p = np.fft.irfft(X, n=block)
     salida = bloque_p[:hop] + state["solapamiento"]
