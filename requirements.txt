@@ -3,3 +3,5 @@ sounddevice
 soundfile
 pyserial
 matplotlib
+mido
+python-rtmidi
